@@ -28,7 +28,7 @@ RUN npm run build
 # ===== Stage 2: Production =====
 FROM node:22-slim AS production
 
-# Install Chrome/Chromium and required dependencies
+# Install Chrome/Chromium, build tools (for native addons), and dependencies
 RUN apt-get update && apt-get install -y \
     chromium \
     fonts-liberation \
@@ -49,6 +49,9 @@ RUN apt-get update && apt-get install -y \
     libxrandr2 \
     xdg-utils \
     dumb-init \
+    python3 \
+    make \
+    g++ \
     && rm -rf /var/lib/apt/lists/*
 
 # Set Chrome executable path for Puppeteer
