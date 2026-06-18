@@ -39,7 +39,7 @@
 "@bull-board/api": "^7.2.1",
 "@bull-board/express": "^7.2.1",
     "@bull-board/nestjs": "^7.1.5",
-    "@nestjs-modules/ioredis": "^1.1.2",
+    "@nestjs-modules/ioredis": "^2.2.1",
     "@nestjs/bullmq": "^11.0.4",
     "@nestjs/common": "^11.1.14",
     "@nestjs/config": "^4.0.2",
