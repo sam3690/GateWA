@@ -1,0 +1,84 @@
+# GateWA - VPS Deployment (No Domain / Direct IP Access)
+# Usage: docker compose -f deploy/docker-compose.vps.yml --env-file deploy/.env.vps up -d
+# First build: docker compose -f deploy/docker-compose.vps.yml --env-file deploy/.env.vps build
+
+services:
+  # ===== GateWA Backend API =====
+  gatewa:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: gatewa-api
+    restart: unless-stopped
+    ports:
+      - '0.0.0.0:${API_PORT:-2785}:2785'
+    environment:
+      - NODE_ENV=${NODE_ENV:-production}
+      - PORT=2785
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+      # Database (SQLite)
+      - DATABASE_TYPE=${DATABASE_TYPE:-sqlite}
+      - DATABASE_NAME=/app/data/gatewa.sqlite
+      - DATABASE_SYNCHRONIZE=false
+      # Engine
+      - ENGINE_TYPE=${ENGINE_TYPE:-whatsapp-web.js}
+      - SESSION_DATA_PATH=/app/data/sessions
+      - PUPPETEER_HEADLESS=${PUPPETEER_HEADLESS:-true}
+      - PUPPETEER_ARGS=${PUPPETEER_ARGS:---no-sandbox,--disable-setuid-sandbox,--disable-dev-shm-usage,--disable-gpu}
+      # Storage (Local)
+      - STORAGE_TYPE=${STORAGE_TYPE:-local}
+      - STORAGE_LOCAL_PATH=/app/data/media
+      # Redis (Disabled)
+      - REDIS_ENABLED=${REDIS_ENABLED:-false}
+      # Webhook
+      - WEBHOOK_TIMEOUT=${WEBHOOK_TIMEOUT:-10000}
+      - WEBHOOK_MAX_RETRIES=${WEBHOOK_MAX_RETRIES:-3}
+      - WEBHOOK_RETRY_DELAY=${WEBHOOK_RETRY_DELAY:-5000}
+      # Rate Limit
+      - RATE_LIMIT_TTL=${RATE_LIMIT_TTL:-60}
+      - RATE_LIMIT_MAX=${RATE_LIMIT_MAX:-100}
+      # Plugins
+      - PLUGINS_ENABLED=${PLUGINS_ENABLED:-true}
+      - PLUGINS_DIR=/app/data/plugins
+      # Security
+      - API_MASTER_KEY=${API_MASTER_KEY:-}
+      # CORS
+      - CORS_ORIGINS=${CORS_ORIGINS:-*}
+      # Swagger
+      - ENABLE_SWAGGER=${ENABLE_SWAGGER:-true}
+    volumes:
+      - gatewa-data:/app/data
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'node',
+          '-e',
+          "require('http').get('http://localhost:2785/api/health', (r) => process.exit(r.statusCode === 200 ? 0 : 1))",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  # ===== Dashboard Frontend =====
+  dashboard:
+    build:
+      context: ./dashboard
+      dockerfile: Dockerfile
+    container_name: gatewa-dashboard
+    restart: unless-stopped
+    ports:
+      - '0.0.0.0:${DASHBOARD_PORT:-2886}:80'
+    depends_on:
+      gatewa:
+        condition: service_healthy
+
+volumes:
+  gatewa-data:
+    driver: local
+
+networks:
+  default:
+    name: gatewa-network

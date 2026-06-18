@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 120" fill="none">
+  <rect width="400" height="120" rx="16" fill="#075E54"/>
+  <text x="80" y="72" font-family="system-ui, -apple-system, sans-serif" font-size="40" font-weight="700" fill="white">GateWA</text>
+  <path d="M32 60C32 40.7 47.7 25 67 25C86.3 25 102 40.7 102 60C102 73.3 93.8 85 82.3 90L78.5 96L85.2 93.3C94.4 97.5 105 95.3 111.7 87.5" stroke="#25D366" stroke-width="5" stroke-linecap="round" fill="none"/>
+  <circle cx="55" cy="55" r="4" fill="#25D366"/>
+  <circle cx="67" cy="55" r="4" fill="#25D366"/>
+  <circle cx="79" cy="55" r="4" fill="#25D366"/>
+</svg>

@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gatewa-sdk"
+version = "0.0.1"
+description = "Official Python SDK for GateWA WhatsApp API Gateway"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.9"
+authors = [
+    { name = "Usama Ayoub" }
+]
+keywords = ["whatsapp", "api", "sdk", "gatewa", "gateway"]
+
+dependencies = [
+    "httpx>=0.25.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-asyncio>=0.23",
+]

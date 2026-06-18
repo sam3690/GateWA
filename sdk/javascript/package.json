@@ -1,0 +1,34 @@
+{
+    "name": "@gatewa/sdk",
+    "version": "0.0.1",
+    "description": "Official JavaScript/TypeScript SDK for GateWA WhatsApp API Gateway",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "build": "tsc",
+        "dev": "tsc --watch",
+        "test": "jest",
+        "lint": "eslint src/"
+    },
+    "keywords": [
+        "whatsapp",
+        "api",
+        "sdk",
+        "gatewa",
+        "gateway"
+    ],
+    "author": "Usama Ayoub",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/gatewa/gatewa",
+        "directory": "sdk/javascript"
+    },
+    "engines": {
+        "node": ">=18"
+    },
+    "peerDependencies": {},
+    "devDependencies": {
+        "typescript": "^5.3.0"
+    }
+}
