@@ -13,8 +13,8 @@ RUN apt-get update && apt-get install -y \
     g++ \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy package files
-COPY package*.json ./
+# Copy package files and npmrc
+COPY package*.json .npmrc ./
 
 # Install all dependencies (including devDependencies for build)
 RUN npm ci
@@ -60,8 +60,8 @@ RUN groupadd -r gatewa && useradd -r -g gatewa gatewa
 
 WORKDIR /app
 
-# Copy package files
-COPY package*.json ./
+# Copy package files and npmrc
+COPY package*.json .npmrc ./
 
 # Install production dependencies only
 RUN npm ci --omit=dev && npm cache clean --force
