@@ -66,8 +66,8 @@ WORKDIR /app
 # Copy package files and npmrc
 COPY package*.json .npmrc ./
 
-# Install production dependencies only
-RUN npm ci --omit=dev && npm cache clean --force
+# Install production dependencies only (build from source for native addons)
+RUN npm_config_build_from_source=true npm ci --omit=dev && npm cache clean --force
 
 # Copy built application from builder stage
 COPY --from=builder /app/dist ./dist
