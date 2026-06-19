@@ -16,6 +16,8 @@ import { createLogger } from '../../common/services/logger.service';
 import { EventsGateway } from '../events/events.gateway';
 import { WebhookService } from '../webhook/webhook.service';
 import { HookManager } from '../../core/hooks';
+import { rm } from 'fs/promises';
+import { join } from 'path';
 
 interface ReconnectState {
   attempts: number;
@@ -178,6 +180,23 @@ export class SessionService implements OnModuleDestroy, OnModuleInit {
     await this.dataSource.transaction(async manager => {
       await manager.remove(session);
     });
+
+    // Clean up session data on disk so re-creating with the same name starts fresh
+    const sessionDataPath = process.env.SESSION_DATA_PATH || './data/sessions';
+    const sessionDir = join(sessionDataPath, session.name);
+    try {
+      await rm(sessionDir, { recursive: true, force: true });
+      this.logger.log(`Cleaned up session data: ${sessionDir}`, {
+        sessionId: id,
+        action: 'delete_cleanup',
+      });
+    } catch (error) {
+      this.logger.warn(`Could not clean up session data: ${sessionDir}`, {
+        error: String(error),
+        action: 'delete_cleanup',
+      });
+    }
+
     this.logger.log(`Session deleted: ${session.name}`, {
       sessionId: id,
       action: 'delete',
