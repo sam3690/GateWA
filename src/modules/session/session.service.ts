@@ -57,6 +57,7 @@ export class SessionService implements OnModuleDestroy, OnModuleInit {
       SessionStatus.INITIALIZING,
       SessionStatus.QR_READY,
       SessionStatus.AUTHENTICATING,
+      SessionStatus.FAILED,
     ];
 
     const result = await this.sessionRepository.update(
@@ -183,7 +184,7 @@ export class SessionService implements OnModuleDestroy, OnModuleInit {
 
     // Clean up session data on disk so re-creating with the same name starts fresh
     const sessionDataPath = process.env.SESSION_DATA_PATH || './data/sessions';
-    const sessionDir = join(sessionDataPath, session.name);
+    const sessionDir = join(sessionDataPath, `session-${session.name}`);
     try {
       await rm(sessionDir, { recursive: true, force: true });
       this.logger.log(`Cleaned up session data: ${sessionDir}`, {
