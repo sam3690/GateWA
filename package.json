@@ -45,7 +45,7 @@
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.1.21",
     "@nestjs/platform-express": "^11.1.21",
-    "@nestjs/platform-socket.io": "^9.3.3",
+    "@nestjs/platform-socket.io": "^11.1.27",
     "@nestjs/swagger": "^11.4.3",
     "@nestjs/throttler": "^6.5.0",
     "@nestjs/websockets": "^9.0.0",
